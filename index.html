@@ -470,8 +470,11 @@ body {
 
   var FX = '<span class="fx"><span class="flash"></span><span class="wave"></span><i style="--a:0.0deg;--d:calc(var(--star) * 1.57);--s:calc(var(--star) * 0.227);--t:640ms"></i><i style="--a:25.7deg;--d:calc(var(--star) * 1.13);--s:calc(var(--star) * 0.16);--t:760ms"></i><i style="--a:51.4deg;--d:calc(var(--star) * 1.57);--s:calc(var(--star) * 0.227);--t:640ms"></i><i style="--a:77.1deg;--d:calc(var(--star) * 1.13);--s:calc(var(--star) * 0.16);--t:760ms"></i><i style="--a:102.9deg;--d:calc(var(--star) * 1.57);--s:calc(var(--star) * 0.227);--t:640ms"></i><i style="--a:128.6deg;--d:calc(var(--star) * 1.13);--s:calc(var(--star) * 0.16);--t:760ms"></i><i style="--a:154.3deg;--d:calc(var(--star) * 1.57);--s:calc(var(--star) * 0.227);--t:640ms"></i><i style="--a:180.0deg;--d:calc(var(--star) * 1.13);--s:calc(var(--star) * 0.16);--t:760ms"></i><i style="--a:205.7deg;--d:calc(var(--star) * 1.57);--s:calc(var(--star) * 0.227);--t:640ms"></i><i style="--a:231.4deg;--d:calc(var(--star) * 1.13);--s:calc(var(--star) * 0.16);--t:760ms"></i><i style="--a:257.1deg;--d:calc(var(--star) * 1.57);--s:calc(var(--star) * 0.227);--t:640ms"></i><i style="--a:282.9deg;--d:calc(var(--star) * 1.13);--s:calc(var(--star) * 0.16);--t:760ms"></i><i style="--a:308.6deg;--d:calc(var(--star) * 1.57);--s:calc(var(--star) * 0.227);--t:640ms"></i><i style="--a:334.3deg;--d:calc(var(--star) * 1.13);--s:calc(var(--star) * 0.16);--t:760ms"></i></span>';
 
-  var FILES = [];
-  for (var i = 2; i <= 47; i++) FILES.push("Frame " + i + ".svg");
+  var NUMBERS = [];
+  for (var i = 2; i <= 47; i++) NUMBERS.push(i);   /* Frame 48 gibt es nicht */
+  NUMBERS.push(49, 50);
+
+  var FILES = NUMBERS.map(function (n) { return "Frame " + n + ".svg"; });
 
   var KEY = "dos-logo-favoriten";
   var favs = {};
