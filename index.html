@@ -1,0 +1,370 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Logo-Entwürfe für Verein «DOS»</title>
+<meta name="description" content="Logo-Entwürfe für den Verein «DOS» (Deko und So)">
+<link rel="icon" href="a_LucaYuri_Logo.PNG">
+<style>
+@font-face {
+  font-family: "AvenirNext";
+  src: url("AvenirNextLTPro-Regular.otf") format("opentype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  --ink: #000;
+  --paper: #fff;
+  --mut: #6b6b6b;
+  --line: #e2e2e2;
+  --mx: clamp(20px, 2.73vw, 41px);
+  --col: 1087px;
+  /* eine einzige Schriftgrösse für alles, 30% kleiner */
+  --fs: clamp(14.7px, 1.68vw, 25.2px);
+}
+
+* { box-sizing: border-box; }
+
+html { -webkit-text-size-adjust: 100%; scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: "AvenirNext", "Avenir Next", Avenir, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-weight: 400;
+  font-style: normal;
+  font-size: var(--fs);
+  line-height: 1.3;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+.page {
+  max-width: 1504px;
+  margin: 0 auto;
+  padding: 0 var(--mx);
+}
+
+.col { max-width: var(--col); }
+
+/* ---------- Kopf / Daten ---------- */
+
+.head {
+  padding-top: clamp(32px, 5.1vw, 77px);
+  padding-bottom: clamp(80px, 20vw, 300px);
+}
+
+.mark {
+  width: clamp(88px, 9.8vw, 147px);
+  height: auto;
+  display: block;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+.title {
+  margin: clamp(18px, 1.9vw, 28px) 0 0;
+  font-size: var(--fs);
+  line-height: 1.14;
+  letter-spacing: 0.005em;
+  font-weight: 400;
+}
+
+.title a {
+  color: inherit;
+  text-decoration: none;
+  border-bottom: 1px solid currentColor;
+}
+
+.title a:hover { opacity: 0.55; }
+
+.title .gap { display: block; height: 1.14em; }
+
+/* ---------- Filterleiste ---------- */
+
+.bar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+  margin-bottom: clamp(24px, 3vw, 44px);
+}
+
+.bar-in {
+  max-width: 1504px;
+  margin: 0 auto;
+  padding: clamp(10px, 1vw, 14px) var(--mx);
+  display: flex;
+  gap: clamp(16px, 2vw, 28px);
+  align-items: baseline;
+  font-size: var(--fs);
+}
+
+.tab {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0;
+  font: inherit;
+  color: var(--mut);
+  cursor: pointer;
+  border-bottom: 1px solid transparent;
+  line-height: 1.3;
+}
+
+.tab:hover { color: var(--ink); }
+.tab[aria-pressed="true"] { color: var(--ink); border-bottom-color: var(--ink); }
+
+/* ---------- Galerie ---------- */
+
+.grid {
+  display: flex;
+  flex-direction: column;
+  gap: clamp(40px, 6vw, 96px);
+}
+
+.card { max-width: var(--col); }
+
+.shot {
+  display: block;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 709 / 736;
+  object-fit: fill;
+  background: #f7f7f7;
+}
+
+.cap {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 16px;
+  margin-top: clamp(8px, 0.8vw, 12px);
+  font-size: var(--fs);
+  line-height: 1.3;
+}
+
+.cap .no { color: var(--ink); }
+
+.fav {
+  appearance: none;
+  background: none;
+  border: 0;
+  padding: 0 0 0 16px;
+  margin: -6px 0;
+  font: inherit;
+  font-size: var(--fs);
+  line-height: 1.3;
+  color: var(--mut);
+  cursor: pointer;
+  display: inline-block;
+}
+
+.fav:hover { color: var(--ink); }
+.fav[aria-pressed="true"] { color: var(--ink); }
+
+.fav .star {
+  font-style: normal;
+  font-family: "Apple Symbols", "Segoe UI Symbol", sans-serif;
+  display: inline-block;
+  padding: 6px 0;
+}
+
+.empty {
+  font-size: var(--fs);
+  line-height: 1.14;
+  color: var(--mut);
+  padding: clamp(24px, 4vw, 60px) 0;
+}
+
+.empty[hidden] { display: none; }
+
+/* ---------- Fuss ---------- */
+
+.foot {
+  padding-top: clamp(64px, 9vw, 140px);
+  padding-bottom: clamp(40px, 5vw, 72px);
+}
+
+.top {
+  appearance: none;
+  background: none;
+  border: 1px solid var(--ink);
+  border-radius: 999px;
+  padding: clamp(12px, 1.1vw, 16px) clamp(22px, 2vw, 30px);
+  font: inherit;
+  font-size: var(--fs);
+  color: var(--ink);
+  cursor: pointer;
+  display: inline-flex;
+  gap: 0.6em;
+  align-items: center;
+  transition: background .15s ease, color .15s ease;
+}
+
+.top:hover { background: var(--ink); color: var(--paper); }
+.top .arr { font-style: normal; }
+
+.sig {
+  margin-top: clamp(24px, 3vw, 40px);
+  font-size: var(--fs);
+  color: var(--mut);
+}
+
+.sig a { color: inherit; text-decoration: none; border-bottom: 1px solid currentColor; }
+.sig a:hover { color: var(--ink); }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  .top { transition: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="page head">
+  <div class="col">
+    <img class="mark" src="a_LucaYuri_Logo.PNG" alt="Logo Nicolas Birrer" width="147" height="147">
+    <h1 class="title">
+      Logo-Entwürfe für<br>
+      Verein «DOS»<br>
+      (Deko und So)<br>
+      16.10.2026
+      <span class="gap"></span>
+      <a href="https://nicolasbirrer.ch">nicolasbirrer.ch</a>
+    </h1>
+  </div>
+</header>
+
+<nav class="bar">
+  <div class="bar-in">
+    <button class="tab" id="tab-all" type="button" aria-pressed="true">Alle <span id="count-all">0</span></button>
+    <button class="tab" id="tab-fav" type="button" aria-pressed="false">Favoriten <span id="count-fav">0</span></button>
+  </div>
+</nav>
+
+<main class="page">
+  <div class="grid" id="grid"></div>
+  <p class="empty" id="empty" hidden>Noch keine Favoriten.<br>Entwürfe mit ☆ markieren.</p>
+</main>
+
+<footer class="page foot">
+  <div class="col">
+    <button class="top" id="top" type="button"><span class="arr" aria-hidden="true">↑</span> Nach oben</button>
+    <p class="sig">Nicolas Birrer · <a href="https://nicolasbirrer.ch">nicolasbirrer.ch</a></p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var FILES = [];
+  for (var i = 2; i <= 47; i++) FILES.push("Frame " + i + ".svg");
+
+  var KEY = "dos-logo-favoriten";
+  var favs = {};
+  try { favs = JSON.parse(localStorage.getItem(KEY)) || {}; } catch (e) { favs = {}; }
+
+  function save() {
+    try { localStorage.setItem(KEY, JSON.stringify(favs)); } catch (e) {}
+  }
+
+  var grid = document.getElementById("grid");
+  var empty = document.getElementById("empty");
+  var tabAll = document.getElementById("tab-all");
+  var tabFav = document.getElementById("tab-fav");
+  var countAll = document.getElementById("count-all");
+  var countFav = document.getElementById("count-fav");
+  var onlyFavs = false;
+
+  var cards = FILES.map(function (file, idx) {
+    var no = String(idx + 1).padStart(2, "0");
+    var id = file.replace(/\.svg$/, "");
+
+    var card = document.createElement("article");
+    card.className = "card";
+    card.dataset.id = id;
+
+    var img = document.createElement("img");
+    img.className = "shot";
+    img.src = "logos/" + encodeURIComponent(file);
+    img.alt = "Logo-Entwurf " + no;
+    img.width = 709;
+    img.height = 736;
+    img.loading = idx < 2 ? "eager" : "lazy";
+    img.decoding = "async";
+
+    var cap = document.createElement("div");
+    cap.className = "cap";
+
+    var label = document.createElement("span");
+    label.className = "no";
+    label.textContent = "Entwurf " + no;
+
+    var btn = document.createElement("button");
+    btn.className = "fav";
+    btn.type = "button";
+    btn.innerHTML = '<span class="star" aria-hidden="true">☆</span>';
+    btn.addEventListener("click", function () {
+      if (favs[id]) { delete favs[id]; } else { favs[id] = true; }
+      save();
+      paint(card, id);
+      refresh();
+    });
+
+    cap.appendChild(label);
+    cap.appendChild(btn);
+    card.appendChild(img);
+    card.appendChild(cap);
+    grid.appendChild(card);
+
+    paint(card, id);
+    return card;
+  });
+
+  function paint(card, id) {
+    var on = !!favs[id];
+    var btn = card.querySelector(".fav");
+    btn.setAttribute("aria-pressed", on ? "true" : "false");
+    btn.querySelector(".star").textContent = on ? "★" : "☆";
+    btn.title = (on ? "Favorit entfernen" : "Favorisieren");
+    btn.setAttribute("aria-label", (on ? "Favorit entfernen: " : "Favorisieren: ") + card.querySelector(".no").textContent);
+  }
+
+  function refresh() {
+    var n = 0;
+    cards.forEach(function (card) {
+      var on = !!favs[card.dataset.id];
+      if (on) n++;
+      card.hidden = onlyFavs && !on;
+    });
+    countAll.textContent = cards.length;
+    countFav.textContent = n;
+    tabAll.setAttribute("aria-pressed", onlyFavs ? "false" : "true");
+    tabFav.setAttribute("aria-pressed", onlyFavs ? "true" : "false");
+    empty.hidden = !(onlyFavs && n === 0);
+  }
+
+  tabAll.addEventListener("click", function () { onlyFavs = false; refresh(); });
+  tabFav.addEventListener("click", function () { onlyFavs = true; refresh(); });
+
+  document.getElementById("top").addEventListener("click", function () {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+
+  window.addEventListener("storage", function (e) {
+    if (e.key !== KEY) return;
+    try { favs = JSON.parse(e.newValue) || {}; } catch (err) { favs = {}; }
+    cards.forEach(function (card) { paint(card, card.dataset.id); });
+    refresh();
+  });
+
+  refresh();
+})();
+</script>
+</body>
+</html>
