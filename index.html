@@ -125,7 +125,11 @@ body {
   gap: clamp(40px, 6vw, 96px);
 }
 
-.card { max-width: var(--col); }
+.card {
+  max-width: var(--col);
+  -webkit-user-select: none;
+  user-select: none;
+}
 
 .shot {
   display: block;
@@ -134,6 +138,9 @@ body {
   aspect-ratio: 709 / 736;
   object-fit: fill;
   background: #f7f7f7;
+  cursor: pointer;
+  touch-action: manipulation;
+  -webkit-user-drag: none;
 }
 
 .cap {
@@ -159,12 +166,14 @@ body {
   display: inline-flex;
   line-height: 0;
   position: relative;
+  touch-action: manipulation;
   -webkit-tap-highlight-color: transparent;
+  --star: calc(var(--fs) * 1.875);
 }
 
 .fav svg {
-  width: calc(var(--fs) * 1.5);
-  height: calc(var(--fs) * 1.5);
+  width: var(--star);
+  height: var(--star);
   display: block;
   fill: var(--soft);
   transform-origin: 50% 50%;
@@ -204,9 +213,9 @@ body {
 }
 
 .fx .wave {
-  width: calc(var(--fs) * 2.4);
-  height: calc(var(--fs) * 2.4);
-  margin: calc(var(--fs) * -1.2) 0 0 calc(var(--fs) * -1.2);
+  width: calc(var(--star) * 1.6);
+  height: calc(var(--star) * 1.6);
+  margin: calc(var(--star) * -.8) 0 0 calc(var(--star) * -.8);
   border-radius: 50%;
   background: radial-gradient(circle,
     rgba(255, 196, 0, 0) 46%,
@@ -215,9 +224,9 @@ body {
 }
 
 .fx .flash {
-  width: calc(var(--fs) * 1.9);
-  height: calc(var(--fs) * 1.9);
-  margin: calc(var(--fs) * -.95) 0 0 calc(var(--fs) * -.95);
+  width: calc(var(--star) * 1.27);
+  height: calc(var(--star) * 1.27);
+  margin: calc(var(--star) * -.635) 0 0 calc(var(--star) * -.635);
   border-radius: 50%;
   background: radial-gradient(circle, rgba(255, 224, 120, .95) 0%, rgba(255, 196, 0, 0) 68%);
 }
@@ -268,7 +277,7 @@ body {
 @keyframes spark {
   0% {
     opacity: 0;
-    transform: rotate(var(--a)) translateY(calc(var(--fs) * -.15)) scale(.2);
+    transform: rotate(var(--a)) translateY(calc(var(--star) * -.1)) scale(.2);
   }
   14% {
     opacity: 1;
@@ -424,7 +433,7 @@ body {
 
 <main class="page">
   <div class="grid" id="grid"></div>
-  <p class="empty" id="empty" hidden>Noch keine Favoriten.<br>Entwürfe mit dem Stern markieren.</p>
+  <p class="empty" id="empty" hidden>Noch keine Favoriten.<br>Entwürfe mit Doppelklick markieren.</p>
 </main>
 
 <footer class="page foot">
@@ -459,7 +468,7 @@ body {
 (function () {
   var STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.4c.35 0 .67.2.83.52l2.6 5.27 5.82.85c.35.05.65.3.76.64.11.34.02.71-.23.96l-4.21 4.1.99 5.79c.06.35-.08.7-.37.91a.93.93 0 0 1-.98.07L12 18.78l-5.21 2.73a.93.93 0 0 1-.98-.07.93.93 0 0 1-.37-.9l.99-5.8-4.2-4.1a.93.93 0 0 1-.24-.96c.11-.34.41-.59.76-.64l5.81-.85 2.6-5.27c.16-.32.49-.52.84-.52z"/></svg>';
 
-  var FX = '<span class="fx"><span class="flash"></span><span class="wave"></span><i style="--a:0.0deg;--d:calc(var(--fs) * 2.35);--s:calc(var(--fs) * 0.34);--t:640ms"></i><i style="--a:25.7deg;--d:calc(var(--fs) * 1.7);--s:calc(var(--fs) * 0.24);--t:760ms"></i><i style="--a:51.4deg;--d:calc(var(--fs) * 2.35);--s:calc(var(--fs) * 0.34);--t:640ms"></i><i style="--a:77.1deg;--d:calc(var(--fs) * 1.7);--s:calc(var(--fs) * 0.24);--t:760ms"></i><i style="--a:102.9deg;--d:calc(var(--fs) * 2.35);--s:calc(var(--fs) * 0.34);--t:640ms"></i><i style="--a:128.6deg;--d:calc(var(--fs) * 1.7);--s:calc(var(--fs) * 0.24);--t:760ms"></i><i style="--a:154.3deg;--d:calc(var(--fs) * 2.35);--s:calc(var(--fs) * 0.34);--t:640ms"></i><i style="--a:180.0deg;--d:calc(var(--fs) * 1.7);--s:calc(var(--fs) * 0.24);--t:760ms"></i><i style="--a:205.7deg;--d:calc(var(--fs) * 2.35);--s:calc(var(--fs) * 0.34);--t:640ms"></i><i style="--a:231.4deg;--d:calc(var(--fs) * 1.7);--s:calc(var(--fs) * 0.24);--t:760ms"></i><i style="--a:257.1deg;--d:calc(var(--fs) * 2.35);--s:calc(var(--fs) * 0.34);--t:640ms"></i><i style="--a:282.9deg;--d:calc(var(--fs) * 1.7);--s:calc(var(--fs) * 0.24);--t:760ms"></i><i style="--a:308.6deg;--d:calc(var(--fs) * 2.35);--s:calc(var(--fs) * 0.34);--t:640ms"></i><i style="--a:334.3deg;--d:calc(var(--fs) * 1.7);--s:calc(var(--fs) * 0.24);--t:760ms"></i></span>';
+  var FX = '<span class="fx"><span class="flash"></span><span class="wave"></span><i style="--a:0.0deg;--d:calc(var(--star) * 1.57);--s:calc(var(--star) * 0.227);--t:640ms"></i><i style="--a:25.7deg;--d:calc(var(--star) * 1.13);--s:calc(var(--star) * 0.16);--t:760ms"></i><i style="--a:51.4deg;--d:calc(var(--star) * 1.57);--s:calc(var(--star) * 0.227);--t:640ms"></i><i style="--a:77.1deg;--d:calc(var(--star) * 1.13);--s:calc(var(--star) * 0.16);--t:760ms"></i><i style="--a:102.9deg;--d:calc(var(--star) * 1.57);--s:calc(var(--star) * 0.227);--t:640ms"></i><i style="--a:128.6deg;--d:calc(var(--star) * 1.13);--s:calc(var(--star) * 0.16);--t:760ms"></i><i style="--a:154.3deg;--d:calc(var(--star) * 1.57);--s:calc(var(--star) * 0.227);--t:640ms"></i><i style="--a:180.0deg;--d:calc(var(--star) * 1.13);--s:calc(var(--star) * 0.16);--t:760ms"></i><i style="--a:205.7deg;--d:calc(var(--star) * 1.57);--s:calc(var(--star) * 0.227);--t:640ms"></i><i style="--a:231.4deg;--d:calc(var(--star) * 1.13);--s:calc(var(--star) * 0.16);--t:760ms"></i><i style="--a:257.1deg;--d:calc(var(--star) * 1.57);--s:calc(var(--star) * 0.227);--t:640ms"></i><i style="--a:282.9deg;--d:calc(var(--star) * 1.13);--s:calc(var(--star) * 0.16);--t:760ms"></i><i style="--a:308.6deg;--d:calc(var(--star) * 1.57);--s:calc(var(--star) * 0.227);--t:640ms"></i><i style="--a:334.3deg;--d:calc(var(--star) * 1.13);--s:calc(var(--star) * 0.16);--t:760ms"></i></span>';
 
   var FILES = [];
   for (var i = 2; i <= 47; i++) FILES.push("Frame " + i + ".svg");
@@ -479,6 +488,21 @@ body {
   var countAll = document.getElementById("count-all");
   var countFav = document.getElementById("count-fav");
   var onlyFavs = false;
+
+  /* Doppelklick mit Maus, Doppeltipp auf dem Handy */
+  function onDouble(el, fn) {
+    el.addEventListener("dblclick", function (e) {
+      e.preventDefault();
+      fn();
+    });
+
+    var last = 0;
+    el.addEventListener("pointerup", function (e) {
+      if (e.pointerType === "mouse") return;
+      var now = Date.now();
+      if (now - last < 400) { last = 0; fn(); } else { last = now; }
+    });
+  }
 
   var cards = FILES.map(function (file, idx) {
     var no = String(idx + 1).padStart(2, "0");
@@ -508,13 +532,23 @@ body {
     btn.className = "fav";
     btn.type = "button";
     btn.innerHTML = FX + STAR;
-    btn.addEventListener("click", function () {
+
+    function toggle() {
       var on = !favs[id];
       if (on) { favs[id] = true; } else { delete favs[id]; }
       save();
       paint(card, id);
       refresh();
       burst(btn, on);
+    }
+
+    /* Doppelklick auf den Entwurf oder auf den Stern */
+    onDouble(img, toggle);
+    onDouble(btn, toggle);
+
+    /* Tastatur bleibt einfach bedienbar */
+    btn.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); toggle(); }
     });
 
     cap.appendChild(label);
@@ -544,7 +578,8 @@ body {
     var name = card.querySelector(".no").textContent;
     btn.setAttribute("aria-pressed", on ? "true" : "false");
     btn.setAttribute("aria-label", (on ? "Favorit entfernen: " : "Favorisieren: ") + name);
-    btn.title = on ? "Favorit entfernen" : "Favorisieren";
+    btn.title = on ? "Doppelklick entfernt den Favoriten" : "Doppelklick favorisiert";
+    card.querySelector(".shot").title = btn.title;
   }
 
   function refresh() {
