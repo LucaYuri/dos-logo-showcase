@@ -19,10 +19,10 @@
   --ink: #000;
   --paper: #fff;
   --mut: #6b6b6b;
-  --line: #e2e2e2;
+  --soft: #c9c9c9;
   --mx: clamp(20px, 2.73vw, 41px);
   --col: 1087px;
-  /* eine einzige Schriftgrösse für alles, 30% kleiner */
+  /* eine einzige Schriftgrösse für alles */
   --fs: clamp(14.7px, 1.68vw, 25.2px);
 }
 
@@ -58,12 +58,15 @@ body {
   padding-bottom: clamp(80px, 20vw, 300px);
 }
 
+/* Logo als 8x8-Grid, shuffelt jede Sekunde neu */
 .mark {
+  display: block;
   width: clamp(88px, 9.8vw, 147px);
   height: auto;
-  display: block;
-  image-rendering: pixelated;
-  image-rendering: crisp-edges;
+}
+
+.mark rect {
+  transition: fill 620ms cubic-bezier(.4, 0, .2, 1);
 }
 
 .title {
@@ -74,24 +77,17 @@ body {
   font-weight: 400;
 }
 
-.title a {
-  color: inherit;
-  text-decoration: none;
-  border-bottom: 1px solid currentColor;
-}
-
-.title a:hover { opacity: 0.55; }
-
+.title a { color: inherit; text-decoration: none; }
+.title a:hover { opacity: 0.5; }
 .title .gap { display: block; height: 1.14em; }
 
-/* ---------- Filterleiste ---------- */
+/* ---------- Filter ---------- */
 
 .bar {
   position: sticky;
   top: 0;
   z-index: 10;
   background: var(--paper);
-  border-bottom: 1px solid var(--line);
   margin-bottom: clamp(24px, 3vw, 44px);
 }
 
@@ -113,12 +109,12 @@ body {
   font: inherit;
   color: var(--mut);
   cursor: pointer;
-  border-bottom: 1px solid transparent;
   line-height: 1.3;
+  transition: color .2s ease;
 }
 
 .tab:hover { color: var(--ink); }
-.tab[aria-pressed="true"] { color: var(--ink); border-bottom-color: var(--ink); }
+.tab[aria-pressed="true"] { color: var(--ink); }
 
 /* ---------- Galerie ---------- */
 
@@ -142,7 +138,7 @@ body {
 .cap {
   display: flex;
   justify-content: space-between;
-  align-items: baseline;
+  align-items: center;
   gap: 16px;
   margin-top: clamp(8px, 0.8vw, 12px);
   font-size: var(--fs);
@@ -155,25 +151,25 @@ body {
   appearance: none;
   background: none;
   border: 0;
-  padding: 0 0 0 16px;
-  margin: -6px 0;
+  padding: 8px;
+  margin: -8px -8px -8px 0;
   font: inherit;
-  font-size: var(--fs);
-  line-height: 1.3;
-  color: var(--mut);
   cursor: pointer;
-  display: inline-block;
+  display: inline-flex;
+  line-height: 0;
 }
 
-.fav:hover { color: var(--ink); }
-.fav[aria-pressed="true"] { color: var(--ink); }
-
-.fav .star {
-  font-style: normal;
-  font-family: "Apple Symbols", "Segoe UI Symbol", sans-serif;
-  display: inline-block;
-  padding: 6px 0;
+.fav svg {
+  width: calc(var(--fs) * 1.5);
+  height: calc(var(--fs) * 1.5);
+  display: block;
+  fill: var(--soft);
+  transition: fill .2s ease, transform .35s cubic-bezier(.34, 1.56, .64, 1);
 }
+
+.fav:hover svg { fill: var(--mut); }
+.fav[aria-pressed="true"] svg { fill: var(--ink); transform: scale(1.1); }
+.fav:active svg { transform: scale(.85); }
 
 .empty {
   font-size: var(--fs);
@@ -181,8 +177,6 @@ body {
   color: var(--mut);
   padding: clamp(24px, 4vw, 60px) 0;
 }
-
-.empty[hidden] { display: none; }
 
 /* ---------- Fuss ---------- */
 
@@ -193,22 +187,22 @@ body {
 
 .top {
   appearance: none;
-  background: none;
-  border: 1px solid var(--ink);
+  background: var(--ink);
+  color: var(--paper);
+  border: 0;
   border-radius: 999px;
   padding: clamp(12px, 1.1vw, 16px) clamp(22px, 2vw, 30px);
   font: inherit;
   font-size: var(--fs);
-  color: var(--ink);
+  line-height: 1;
   cursor: pointer;
   display: inline-flex;
   gap: 0.6em;
   align-items: center;
-  transition: background .15s ease, color .15s ease;
+  transition: opacity .2s ease;
 }
 
-.top:hover { background: var(--ink); color: var(--paper); }
-.top .arr { font-style: normal; }
+.top:hover { opacity: 0.7; }
 
 .sig {
   margin-top: clamp(24px, 3vw, 40px);
@@ -216,12 +210,12 @@ body {
   color: var(--mut);
 }
 
-.sig a { color: inherit; text-decoration: none; border-bottom: 1px solid currentColor; }
+.sig a { color: inherit; text-decoration: none; }
 .sig a:hover { color: var(--ink); }
 
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
-  .top { transition: none; }
+  .mark rect, .fav svg, .top, .tab { transition: none; }
 }
 </style>
 </head>
@@ -229,7 +223,72 @@ body {
 
 <header class="page head">
   <div class="col">
-    <img class="mark" src="a_LucaYuri_Logo.PNG" alt="Logo Nicolas Birrer" width="147" height="147">
+    <svg class="mark" id="mark" viewBox="0 0 8 8" shape-rendering="crispEdges" role="img" aria-label="Logo Nicolas Birrer">
+      <rect x="0" y="0" width="1" height="1" fill="#356285" style="transition-delay:0ms"/>
+      <rect x="1" y="0" width="1" height="1" fill="#25365c" style="transition-delay:14ms"/>
+      <rect x="2" y="0" width="1" height="1" fill="#38688c" style="transition-delay:28ms"/>
+      <rect x="3" y="0" width="1" height="1" fill="#a9b7d4" style="transition-delay:42ms"/>
+      <rect x="4" y="0" width="1" height="1" fill="#a9d4ba" style="transition-delay:56ms"/>
+      <rect x="5" y="0" width="1" height="1" fill="#356285" style="transition-delay:70ms"/>
+      <rect x="6" y="0" width="1" height="1" fill="#54778a" style="transition-delay:84ms"/>
+      <rect x="7" y="0" width="1" height="1" fill="#abbac2" style="transition-delay:98ms"/>
+      <rect x="0" y="1" width="1" height="1" fill="#38688c" style="transition-delay:14ms"/>
+      <rect x="1" y="1" width="1" height="1" fill="#63806e" style="transition-delay:28ms"/>
+      <rect x="2" y="1" width="1" height="1" fill="#356285" style="transition-delay:42ms"/>
+      <rect x="3" y="1" width="1" height="1" fill="#25365c" style="transition-delay:56ms"/>
+      <rect x="4" y="1" width="1" height="1" fill="#63806e" style="transition-delay:70ms"/>
+      <rect x="5" y="1" width="1" height="1" fill="#25365c" style="transition-delay:84ms"/>
+      <rect x="6" y="1" width="1" height="1" fill="#c1e1f2" style="transition-delay:98ms"/>
+      <rect x="7" y="1" width="1" height="1" fill="#25365c" style="transition-delay:112ms"/>
+      <rect x="0" y="2" width="1" height="1" fill="#a9d4ba" style="transition-delay:28ms"/>
+      <rect x="1" y="2" width="1" height="1" fill="#c1e1f2" style="transition-delay:42ms"/>
+      <rect x="2" y="2" width="1" height="1" fill="#494f5c" style="transition-delay:56ms"/>
+      <rect x="3" y="2" width="1" height="1" fill="#356285" style="transition-delay:70ms"/>
+      <rect x="4" y="2" width="1" height="1" fill="#a9d4ba" style="transition-delay:84ms"/>
+      <rect x="5" y="2" width="1" height="1" fill="#86d4a5" style="transition-delay:98ms"/>
+      <rect x="6" y="2" width="1" height="1" fill="#25365c" style="transition-delay:112ms"/>
+      <rect x="7" y="2" width="1" height="1" fill="#38688c" style="transition-delay:126ms"/>
+      <rect x="0" y="3" width="1" height="1" fill="#a9b7d4" style="transition-delay:42ms"/>
+      <rect x="1" y="3" width="1" height="1" fill="#494f5c" style="transition-delay:56ms"/>
+      <rect x="2" y="3" width="1" height="1" fill="#25365c" style="transition-delay:70ms"/>
+      <rect x="3" y="3" width="1" height="1" fill="#63806e" style="transition-delay:84ms"/>
+      <rect x="4" y="3" width="1" height="1" fill="#c1e1f2" style="transition-delay:98ms"/>
+      <rect x="5" y="3" width="1" height="1" fill="#63806e" style="transition-delay:112ms"/>
+      <rect x="6" y="3" width="1" height="1" fill="#494f5c" style="transition-delay:126ms"/>
+      <rect x="7" y="3" width="1" height="1" fill="#a9b7d4" style="transition-delay:140ms"/>
+      <rect x="0" y="4" width="1" height="1" fill="#63806e" style="transition-delay:56ms"/>
+      <rect x="1" y="4" width="1" height="1" fill="#a9d4ba" style="transition-delay:70ms"/>
+      <rect x="2" y="4" width="1" height="1" fill="#25365c" style="transition-delay:84ms"/>
+      <rect x="3" y="4" width="1" height="1" fill="#63806e" style="transition-delay:98ms"/>
+      <rect x="4" y="4" width="1" height="1" fill="#a9d4ba" style="transition-delay:112ms"/>
+      <rect x="5" y="4" width="1" height="1" fill="#494f5c" style="transition-delay:126ms"/>
+      <rect x="6" y="4" width="1" height="1" fill="#25365c" style="transition-delay:140ms"/>
+      <rect x="7" y="4" width="1" height="1" fill="#25365c" style="transition-delay:154ms"/>
+      <rect x="0" y="5" width="1" height="1" fill="#356285" style="transition-delay:70ms"/>
+      <rect x="1" y="5" width="1" height="1" fill="#a9d4cd" style="transition-delay:84ms"/>
+      <rect x="2" y="5" width="1" height="1" fill="#a9b7d4" style="transition-delay:98ms"/>
+      <rect x="3" y="5" width="1" height="1" fill="#a9d4cd" style="transition-delay:112ms"/>
+      <rect x="4" y="5" width="1" height="1" fill="#a9d4cd" style="transition-delay:126ms"/>
+      <rect x="5" y="5" width="1" height="1" fill="#494f5c" style="transition-delay:140ms"/>
+      <rect x="6" y="5" width="1" height="1" fill="#25365c" style="transition-delay:154ms"/>
+      <rect x="7" y="5" width="1" height="1" fill="#a9b7d4" style="transition-delay:168ms"/>
+      <rect x="0" y="6" width="1" height="1" fill="#a9b7d4" style="transition-delay:84ms"/>
+      <rect x="1" y="6" width="1" height="1" fill="#63806e" style="transition-delay:98ms"/>
+      <rect x="2" y="6" width="1" height="1" fill="#a9b7d4" style="transition-delay:112ms"/>
+      <rect x="3" y="6" width="1" height="1" fill="#356285" style="transition-delay:126ms"/>
+      <rect x="4" y="6" width="1" height="1" fill="#a9d4cd" style="transition-delay:140ms"/>
+      <rect x="5" y="6" width="1" height="1" fill="#a9d4cd" style="transition-delay:154ms"/>
+      <rect x="6" y="6" width="1" height="1" fill="#a9d4ba" style="transition-delay:168ms"/>
+      <rect x="7" y="6" width="1" height="1" fill="#63806e" style="transition-delay:182ms"/>
+      <rect x="0" y="7" width="1" height="1" fill="#356285" style="transition-delay:98ms"/>
+      <rect x="1" y="7" width="1" height="1" fill="#25365c" style="transition-delay:112ms"/>
+      <rect x="2" y="7" width="1" height="1" fill="#54778a" style="transition-delay:126ms"/>
+      <rect x="3" y="7" width="1" height="1" fill="#63806e" style="transition-delay:140ms"/>
+      <rect x="4" y="7" width="1" height="1" fill="#a9b7d4" style="transition-delay:154ms"/>
+      <rect x="5" y="7" width="1" height="1" fill="#a9d4cd" style="transition-delay:168ms"/>
+      <rect x="6" y="7" width="1" height="1" fill="#a9d4cd" style="transition-delay:182ms"/>
+      <rect x="7" y="7" width="1" height="1" fill="#25365c" style="transition-delay:196ms"/>
+    </svg>
     <h1 class="title">
       Logo-Entwürfe für<br>
       Verein «DOS»<br>
@@ -250,18 +309,41 @@ body {
 
 <main class="page">
   <div class="grid" id="grid"></div>
-  <p class="empty" id="empty" hidden>Noch keine Favoriten.<br>Entwürfe mit ☆ markieren.</p>
+  <p class="empty" id="empty" hidden>Noch keine Favoriten.<br>Entwürfe mit dem Stern markieren.</p>
 </main>
 
 <footer class="page foot">
   <div class="col">
-    <button class="top" id="top" type="button"><span class="arr" aria-hidden="true">↑</span> Nach oben</button>
+    <button class="top" id="top" type="button"><span aria-hidden="true">↑</span> Nach oben</button>
     <p class="sig">Nicolas Birrer · <a href="https://nicolasbirrer.ch">nicolasbirrer.ch</a></p>
   </div>
 </footer>
 
 <script>
+/* ---------- Logo-Grid: jede Sekunde neu mischen ---------- */
 (function () {
+  var COLORS = ["#356285","#25365c","#38688c","#a9b7d4","#a9d4ba","#356285","#54778a","#abbac2","#38688c","#63806e","#356285","#25365c","#63806e","#25365c","#c1e1f2","#25365c","#a9d4ba","#c1e1f2","#494f5c","#356285","#a9d4ba","#86d4a5","#25365c","#38688c","#a9b7d4","#494f5c","#25365c","#63806e","#c1e1f2","#63806e","#494f5c","#a9b7d4","#63806e","#a9d4ba","#25365c","#63806e","#a9d4ba","#494f5c","#25365c","#25365c","#356285","#a9d4cd","#a9b7d4","#a9d4cd","#a9d4cd","#494f5c","#25365c","#a9b7d4","#a9b7d4","#63806e","#a9b7d4","#356285","#a9d4cd","#a9d4cd","#a9d4ba","#63806e","#356285","#25365c","#54778a","#63806e","#a9b7d4","#a9d4cd","#a9d4cd","#25365c"];
+  var cells = Array.prototype.slice.call(document.querySelectorAll("#mark rect"));
+  if (!cells.length) return;
+  if (window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  function shuffle() {
+    if (document.hidden) return;
+    var p = COLORS.slice();
+    for (var i = p.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var t = p[i]; p[i] = p[j]; p[j] = t;
+    }
+    for (var k = 0; k < cells.length; k++) cells[k].setAttribute("fill", p[k]);
+  }
+
+  setInterval(shuffle, 1000);
+})();
+
+/* ---------- Galerie + Favoriten ---------- */
+(function () {
+  var STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.4c.35 0 .67.2.83.52l2.6 5.27 5.82.85c.35.05.65.3.76.64.11.34.02.71-.23.96l-4.21 4.1.99 5.79c.06.35-.08.7-.37.91a.93.93 0 0 1-.98.07L12 18.78l-5.21 2.73a.93.93 0 0 1-.98-.07.93.93 0 0 1-.37-.9l.99-5.8-4.2-4.1a.93.93 0 0 1-.24-.96c.11-.34.41-.59.76-.64l5.81-.85 2.6-5.27c.16-.32.49-.52.84-.52z"/></svg>';
+
   var FILES = [];
   for (var i = 2; i <= 47; i++) FILES.push("Frame " + i + ".svg");
 
@@ -308,7 +390,7 @@ body {
     var btn = document.createElement("button");
     btn.className = "fav";
     btn.type = "button";
-    btn.innerHTML = '<span class="star" aria-hidden="true">☆</span>';
+    btn.innerHTML = STAR;
     btn.addEventListener("click", function () {
       if (favs[id]) { delete favs[id]; } else { favs[id] = true; }
       save();
@@ -329,10 +411,10 @@ body {
   function paint(card, id) {
     var on = !!favs[id];
     var btn = card.querySelector(".fav");
+    var name = card.querySelector(".no").textContent;
     btn.setAttribute("aria-pressed", on ? "true" : "false");
-    btn.querySelector(".star").textContent = on ? "★" : "☆";
-    btn.title = (on ? "Favorit entfernen" : "Favorisieren");
-    btn.setAttribute("aria-label", (on ? "Favorit entfernen: " : "Favorisieren: ") + card.querySelector(".no").textContent);
+    btn.setAttribute("aria-label", (on ? "Favorit entfernen: " : "Favorisieren: ") + name);
+    btn.title = on ? "Favorit entfernen" : "Favorisieren";
   }
 
   function refresh() {
