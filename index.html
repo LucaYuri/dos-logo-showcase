@@ -20,6 +20,7 @@
   --paper: #fff;
   --mut: #6b6b6b;
   --soft: #c9c9c9;
+  --gold: #ffc400;
   --mx: clamp(20px, 2.73vw, 41px);
   --col: 1087px;
   /* eine einzige Schriftgrösse für alles */
@@ -157,6 +158,8 @@ body {
   cursor: pointer;
   display: inline-flex;
   line-height: 0;
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .fav svg {
@@ -164,12 +167,122 @@ body {
   height: calc(var(--fs) * 1.5);
   display: block;
   fill: var(--soft);
-  transition: fill .2s ease, transform .35s cubic-bezier(.34, 1.56, .64, 1);
+  transform-origin: 50% 50%;
+  position: relative;
+  z-index: 1;
+  transition: fill .25s ease, transform .35s cubic-bezier(.34, 1.56, .64, 1);
 }
 
 .fav:hover svg { fill: var(--mut); }
-.fav[aria-pressed="true"] svg { fill: var(--ink); transform: scale(1.1); }
-.fav:active svg { transform: scale(.85); }
+.fav:active svg { transform: scale(.82); }
+
+.fav[aria-pressed="true"] svg {
+  fill: var(--gold);
+  transform: scale(1.1);
+}
+
+.fav[aria-pressed="true"]:hover svg { fill: #ffb300; }
+
+/* ---- Effektebene: Schockwelle, Funken, Ringe ---- */
+
+.fx {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+}
+
+.fx span,
+.fx i {
+  position: absolute;
+  left: 0;
+  top: 0;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+.fx .wave {
+  width: calc(var(--fs) * 2.4);
+  height: calc(var(--fs) * 2.4);
+  margin: calc(var(--fs) * -1.2) 0 0 calc(var(--fs) * -1.2);
+  border-radius: 50%;
+  background: radial-gradient(circle,
+    rgba(255, 196, 0, 0) 46%,
+    rgba(255, 196, 0, .75) 60%,
+    rgba(255, 196, 0, 0) 76%);
+}
+
+.fx .flash {
+  width: calc(var(--fs) * 1.9);
+  height: calc(var(--fs) * 1.9);
+  margin: calc(var(--fs) * -.95) 0 0 calc(var(--fs) * -.95);
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(255, 224, 120, .95) 0%, rgba(255, 196, 0, 0) 68%);
+}
+
+.fx i {
+  width: var(--s);
+  height: var(--s);
+  margin: calc(var(--s) / -2) 0 0 calc(var(--s) / -2);
+  border-radius: 50%;
+  background: var(--gold);
+}
+
+.fx i:nth-child(3n) { background: #ffe082; }
+.fx i:nth-child(4n) { border-radius: 2px; }
+
+.fav.pop svg { animation: starPop 780ms cubic-bezier(.3, 1.3, .45, 1) both; }
+.fav.pop .wave { animation: wave 640ms cubic-bezier(.15, .75, .3, 1) both; }
+.fav.pop .flash { animation: flash 520ms ease-out both; }
+.fav.pop i { animation: spark var(--t) cubic-bezier(.15, .75, .3, 1) both; }
+
+.fav.off svg { animation: starOff 420ms cubic-bezier(.4, 0, .2, 1) both; }
+
+@keyframes starPop {
+  0%   { transform: scale(1) rotate(0deg);        filter: drop-shadow(0 0 0 rgba(255, 196, 0, 0)); }
+  13%  { transform: scale(.42) rotate(-45deg);    filter: drop-shadow(0 0 0 rgba(255, 196, 0, 0)); }
+  40%  { transform: scale(1.7) rotate(205deg);    filter: drop-shadow(0 0 16px rgba(255, 196, 0, 1)); }
+  62%  { transform: scale(.92) rotate(330deg); }
+  80%  { transform: scale(1.22) rotate(372deg);   filter: drop-shadow(0 0 8px rgba(255, 196, 0, .55)); }
+  100% { transform: scale(1.1) rotate(360deg);    filter: drop-shadow(0 0 0 rgba(255, 196, 0, 0)); }
+}
+
+@keyframes starOff {
+  0%   { transform: scale(1.1) rotate(0deg); }
+  45%  { transform: scale(.72) rotate(14deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
+@keyframes wave {
+  0%   { opacity: .9; transform: scale(.15); }
+  100% { opacity: 0;  transform: scale(1.9); }
+}
+
+@keyframes flash {
+  0%   { opacity: .9; transform: scale(.2); }
+  100% { opacity: 0;  transform: scale(1.5); }
+}
+
+@keyframes spark {
+  0% {
+    opacity: 0;
+    transform: rotate(var(--a)) translateY(calc(var(--fs) * -.15)) scale(.2);
+  }
+  14% {
+    opacity: 1;
+    transform: rotate(var(--a)) translateY(calc(var(--d) * -.38)) scale(1.15);
+  }
+  72% {
+    opacity: 1;
+    transform: rotate(var(--a)) translateY(calc(var(--d) * -.86)) scale(.85);
+  }
+  100% {
+    opacity: 0;
+    transform: rotate(var(--a)) translateY(calc(var(--d) * -1.08)) scale(.25);
+  }
+}
 
 .empty {
   font-size: var(--fs);
@@ -216,6 +329,8 @@ body {
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .mark rect, .fav svg, .top, .tab { transition: none; }
+  .fav.pop svg, .fav.off svg, .fav.pop .wave, .fav.pop .flash, .fav.pop i { animation: none; }
+  .fx { display: none; }
 }
 </style>
 </head>
@@ -344,6 +459,8 @@ body {
 (function () {
   var STAR = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.4c.35 0 .67.2.83.52l2.6 5.27 5.82.85c.35.05.65.3.76.64.11.34.02.71-.23.96l-4.21 4.1.99 5.79c.06.35-.08.7-.37.91a.93.93 0 0 1-.98.07L12 18.78l-5.21 2.73a.93.93 0 0 1-.98-.07.93.93 0 0 1-.37-.9l.99-5.8-4.2-4.1a.93.93 0 0 1-.24-.96c.11-.34.41-.59.76-.64l5.81-.85 2.6-5.27c.16-.32.49-.52.84-.52z"/></svg>';
 
+  var FX = '<span class="fx"><span class="flash"></span><span class="wave"></span><i style="--a:0.0deg;--d:calc(var(--fs) * 2.35);--s:calc(var(--fs) * 0.34);--t:640ms"></i><i style="--a:25.7deg;--d:calc(var(--fs) * 1.7);--s:calc(var(--fs) * 0.24);--t:760ms"></i><i style="--a:51.4deg;--d:calc(var(--fs) * 2.35);--s:calc(var(--fs) * 0.34);--t:640ms"></i><i style="--a:77.1deg;--d:calc(var(--fs) * 1.7);--s:calc(var(--fs) * 0.24);--t:760ms"></i><i style="--a:102.9deg;--d:calc(var(--fs) * 2.35);--s:calc(var(--fs) * 0.34);--t:640ms"></i><i style="--a:128.6deg;--d:calc(var(--fs) * 1.7);--s:calc(var(--fs) * 0.24);--t:760ms"></i><i style="--a:154.3deg;--d:calc(var(--fs) * 2.35);--s:calc(var(--fs) * 0.34);--t:640ms"></i><i style="--a:180.0deg;--d:calc(var(--fs) * 1.7);--s:calc(var(--fs) * 0.24);--t:760ms"></i><i style="--a:205.7deg;--d:calc(var(--fs) * 2.35);--s:calc(var(--fs) * 0.34);--t:640ms"></i><i style="--a:231.4deg;--d:calc(var(--fs) * 1.7);--s:calc(var(--fs) * 0.24);--t:760ms"></i><i style="--a:257.1deg;--d:calc(var(--fs) * 2.35);--s:calc(var(--fs) * 0.34);--t:640ms"></i><i style="--a:282.9deg;--d:calc(var(--fs) * 1.7);--s:calc(var(--fs) * 0.24);--t:760ms"></i><i style="--a:308.6deg;--d:calc(var(--fs) * 2.35);--s:calc(var(--fs) * 0.34);--t:640ms"></i><i style="--a:334.3deg;--d:calc(var(--fs) * 1.7);--s:calc(var(--fs) * 0.24);--t:760ms"></i></span>';
+
   var FILES = [];
   for (var i = 2; i <= 47; i++) FILES.push("Frame " + i + ".svg");
 
@@ -390,12 +507,14 @@ body {
     var btn = document.createElement("button");
     btn.className = "fav";
     btn.type = "button";
-    btn.innerHTML = STAR;
+    btn.innerHTML = FX + STAR;
     btn.addEventListener("click", function () {
-      if (favs[id]) { delete favs[id]; } else { favs[id] = true; }
+      var on = !favs[id];
+      if (on) { favs[id] = true; } else { delete favs[id]; }
       save();
       paint(card, id);
       refresh();
+      burst(btn, on);
     });
 
     cap.appendChild(label);
@@ -407,6 +526,17 @@ body {
     paint(card, id);
     return card;
   });
+
+  var REDUCED = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function burst(btn, on) {
+    if (REDUCED) return;
+    btn.classList.remove("pop", "off");
+    void btn.offsetWidth;            /* Reflow: Animation neu starten */
+    btn.classList.add(on ? "pop" : "off");
+    clearTimeout(btn._fx);
+    btn._fx = setTimeout(function () { btn.classList.remove("pop", "off"); }, 900);
+  }
 
   function paint(card, id) {
     var on = !!favs[id];
